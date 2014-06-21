@@ -33,16 +33,11 @@
             <artifactId>JAXBSchemas-xmldsig</artifactId>
             <version>1.0.0-SNAPSHOT</version>
         </dependency>
-        <!-- FIXME Trouble shooting org.jvnet.mjiip.v_2_2.XJC22Mojo -->
-
-        <dependency><groupId>org.jvnet.jaxb2.maven2</groupId>
-            <artifactId>maven-jaxb2-plugin</artifactId>
-            <version>0.9.0</version></dependency>
     </dependencies>
 
     <build>
         <plugins>
-            <!-- Use this to refresh the local edited copy of wms-episode.xjb -->
+            <!-- Extracts the dependencies needed for this schema -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
@@ -66,7 +61,6 @@
                     </execution>
                 </executions>
             </plugin>
-            <!-- -->
             <plugin>
                 <groupId>org.jvnet.jaxb2.maven2</groupId>
                 <artifactId>maven-jaxb2-plugin</artifactId>
