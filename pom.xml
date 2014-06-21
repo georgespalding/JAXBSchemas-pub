@@ -19,7 +19,7 @@
 
     <properties>
         <schema.name>xenc</schema.name>
-        <schema.path>META-INF/schema/oasis</schema.path>
+        <schema.path>META-INF/schema/w3c</schema.path>
     </properties>
 
     <dependencies>
@@ -54,7 +54,7 @@
                                     <groupId>se.omegapoint.xml.jaxb</groupId>
                                     <artifactId>JAXBSchemas-xmldsig</artifactId>
                                     <outputDirectory>src/main/resources</outputDirectory>
-                                    <includes>META-INF/schema/oasis/xmldsig-episode.xjb,META-INF/schema/oasis/xmldsig-core-schema.xsd</includes>
+                                    <includes>META-INF/schema/w3c/xmldsig-episode.xjb,META-INF/schema/w3c/xmldsig-core-schema.xsd</includes>
                                 </artifactItem>
                             </artifactItems>
                         </configuration>
@@ -65,7 +65,7 @@
                 <groupId>org.jvnet.jaxb2.maven2</groupId>
                 <artifactId>maven-jaxb2-plugin</artifactId>
                 <configuration>
-                    <catalog>src/main/resources/META-INF/schema/oasis/xenc-schemas.cat</catalog>
+                    <catalog>src/main/resources/META-INF/schema/w3c/xenc-schemas.cat</catalog>
                     <schemaExcludes><schemaExclude>xmldsig-core-schema.xsd</schemaExclude></schemaExcludes>
                 </configuration>
             </plugin>
