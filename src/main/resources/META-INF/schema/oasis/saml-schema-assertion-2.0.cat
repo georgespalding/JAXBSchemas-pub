@@ -1,0 +1,3 @@
+-- TR9401 Format --
+SYSTEM "http://www.w3.org/TR/2002/REC-xmldsig-core-20020212/xmldsig-core-schema.xsd" "../w3c/xmldsig-core-schema.xsd"
+SYSTEM "http://www.w3.org/TR/2002/REC-xmlenc-core-20021210/xenc-schema.xsd" "../w3c/xenc-schema.xsd"
