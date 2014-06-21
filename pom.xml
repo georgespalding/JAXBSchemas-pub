@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>se.omegapoint.xml.jaxb</groupId>
+    <version>1.0.0-SNAPSHOT</version>
+    <artifactId>JAXBSchemas-common</artifactId>
+    <packaging>pom</packaging>
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <scm>
+        <developerConnection>scm:git:git@github.com:Omegapoint/${project.artifactId}.git</developerConnection>
+        <tag>HEAD</tag>
+    </scm>
+
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>3.1</version>
+                    <configuration>
+                        <source>1.7</source>
+                        <target>1.7</target>
+                        <encoding>${project.build.sourceEncoding}</encoding>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.jvnet.jaxb2.maven2</groupId>
+                    <artifactId>maven-jaxb2-plugin</artifactId>
+                    <version>0.9.0</version>
+                    <executions>
+                        <execution>
+                            <goals>
+                                <goal>generate</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                    <configuration>
+                        <generatePackage>${schema.package}</generatePackage>
+                        <!-- The episode file can be used by webservices to instruct wsimport/xjc which pojos to bind -->
+                        <!-- see https://jax-ws-commons.java.net/jaxws-maven-plugin/wsimport-mojo.html#xjcArgs -->
+                        <!-- see http://docs.oracle.com/javase/7/docs/technotes/tools/share/xjc.html -->
+                        <!-- (see http://static.highsource.org/mjiip/maven-jaxb2-plugin/generate-mojo.html#episodeFile) -->
+                        <episodeFile>${project.build.directory}/generated-sources/xjc/${schema.path}/${schema.name}-episode.xjb</episodeFile>
+                        <schemaDirectory>${basedir}/src/main/resources/${schema.path}</schemaDirectory>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-release-plugin</artifactId>
+                    <version>2.5</version>
+                    <configuration>
+                        <tagNameFormat>@{project.version}</tagNameFormat>
+                        <autoVersionSubmodules>true</autoVersionSubmodules>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-resources-plugin</artifactId>
+                    <version>2.6</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
+    </build>
+
+    <!--
+        <distributionManagement>
+            <repository>
+                <id>omegapoint-nexus</id>
+                <name>Public Repositories</name>
+                <url>http://10.12.22.84:8081/nexus/content/repositories/releases</url>
+            </repository>
+        </distributionManagement>
+
+        <pluginRepositories>
+            <pluginRepository>
+                <id>omegapoint-nexus-public</id>
+                <name>Public Repositories</name>
+                <url>http://10.12.22.84:8081/nexus/content/groups/public</url>
+                <releases>
+                    <enabled>true</enabled>
+                </releases>
+                <snapshots>
+                    <enabled>false</enabled>
+                </snapshots>
+            </pluginRepository>
+        </pluginRepositories>
+        <repositories>
+            <repository>
+                <id>omegapoint-nexus-public</id>
+                <name>Public Repositories</name>
+                <url>http://10.12.22.84:8081/nexus/content/groups/public</url>
+                <releases>
+                    <enabled>true</enabled>
+                </releases>
+                <snapshots>
+                    <enabled>false</enabled>
+                </snapshots>
+            </repository>
+            <repository>
+                <id>omegapoint-nexus-snapshot</id>
+                <name>Snapshot Repositories</name>
+                <url>http://10.12.22.84:8081/nexus/content/groups/snapshots</url>
+                <releases>
+                    <enabled>false</enabled>
+                </releases>
+                <snapshots>
+                    <enabled>true</enabled>
+                </snapshots>
+            </repository>
+            <repository>
+                <id>omegapoint-nexus-releases</id>
+                <name>Public Repositories</name>
+                <url>http://10.12.22.84:8081/nexus/content/repositories/releases</url>
+                <releases>
+                    <enabled>true</enabled>
+                </releases>
+                <snapshots>
+                    <enabled>false</enabled>
+                </snapshots>
+            </repository>
+        </repositories>
+    -->
+
+</project>
