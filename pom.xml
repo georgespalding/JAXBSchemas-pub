@@ -1,0 +1,80 @@
+<?xml version="1.0"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <artifactId>JAXBSchemas-common</artifactId>
+        <groupId>se.omegapoint.xml.jaxb</groupId>
+        <version>1.0.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>JAXBSchemas-xenc</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+    <packaging>jar</packaging>
+
+    <scm>
+        <developerConnection>scm:git:git@github.com:Omegapoint/${project.artifactId}.git</developerConnection>
+        <tag>HEAD</tag>
+    </scm>
+
+    <properties>
+        <schema.name>xenc</schema.name>
+        <schema.path>META-INF/schema/oasis</schema.path>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>se.omegapoint.xml.jaxb</groupId>
+            <artifactId>JAXBSchemas-util</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>se.omegapoint.xml.jaxb</groupId>
+            <artifactId>JAXBSchemas-xmldsig</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
+        </dependency>
+        <!-- FIXME Trouble shooting org.jvnet.mjiip.v_2_2.XJC22Mojo -->
+
+        <dependency><groupId>org.jvnet.jaxb2.maven2</groupId>
+            <artifactId>maven-jaxb2-plugin</artifactId>
+            <version>0.9.0</version></dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <!-- Use this to refresh the local edited copy of wms-episode.xjb -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>unpack-depend-schemas</id>
+                        <phase>initialize</phase>
+                        <goals>
+                            <goal>unpack</goal>
+                        </goals>
+                        <configuration>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>se.omegapoint.xml.jaxb</groupId>
+                                    <artifactId>JAXBSchemas-xmldsig</artifactId>
+                                    <outputDirectory>src/main/resources</outputDirectory>
+                                    <includes>META-INF/schema/oasis/xmldsig-episode.xjb,META-INF/schema/oasis/xmldsig-core-schema.xsd</includes>
+                                </artifactItem>
+                            </artifactItems>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <!-- -->
+            <plugin>
+                <groupId>org.jvnet.jaxb2.maven2</groupId>
+                <artifactId>maven-jaxb2-plugin</artifactId>
+                <configuration>
+                    <catalog>src/main/resources/META-INF/schema/oasis/xenc-schemas.cat</catalog>
+                    <schemaExcludes><schemaExclude>xmldsig-core-schema.xsd</schemaExclude></schemaExcludes>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>

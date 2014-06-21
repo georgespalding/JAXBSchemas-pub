@@ -1,0 +1,3 @@
+-- TR9401 Format --
+SYSTEM "http://www.w3.org/TR/2002/REC-xmldsig-core-20020212/xmldsig-core-schema.xsd" "xmldsig-core-schema.xsd"
+-- http://blog.bdoughan.com/2011/10/jaxb-xjc-imported-schemas-and-xml.html --
