@@ -10,8 +10,11 @@
     </properties>
 
     <scm>
+        <!-- Release using this oneliner:
+        mvn -Dpush.changes=true release:clean release:prepare release:perform -B -e
+        -->
         <developerConnection>scm:git:git@github.com:Omegapoint/${project.artifactId}.git</developerConnection>
-        <tag>1.0.0</tag>
+        <tag>1.0.0-SNAPSHOT</tag>
     </scm>
 
     <build>
