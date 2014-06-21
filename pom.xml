@@ -17,6 +17,32 @@
         <tag>HEAD</tag>
     </scm>
 
+    <repositories>
+        <repository>
+            <id>omegapoint-nexus-central</id>
+            <name>Sonatype nexus on localhost mirror of central</name>
+            <url>http://localhost:9091/nexus/content/repositories/central/</url>
+        </repository>
+        <repository>
+            <id>omegapoint-nexus-thirdparty</id>
+            <name>Sonatype nexus on localhost 3rd party</name>
+            <url>http://localhost:9091/nexus/content/repositories/thirdparty/</url>
+        </repository>
+    </repositories>
+
+    <distributionManagement>
+        <repository>
+            <id>omegapoint-nexus</id>
+            <name>Internal Releases</name>
+            <url>http://localhost:9091/nexus/content/repositories/releases/</url>
+        </repository>
+        <snapshotRepository>
+            <id>omegapoint-nexus</id>
+            <name>Internal Snapshots</name>
+            <url>http://localhost:9091/nexus/content/repositories/snapshots/</url>
+        </snapshotRepository>
+    </distributionManagement>
+
     <build>
         <pluginManagement>
             <plugins>
@@ -70,6 +96,21 @@
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-resources-plugin</artifactId>
                     <version>2.6</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-javadoc-plugin</artifactId>
+                    <version>2.9.1</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-source-plugin</artifactId>
+                    <version>2.2.1</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-deploy-plugin</artifactId>
+                    <version>2.8.1</version>
                 </plugin>
             </plugins>
         </pluginManagement>
