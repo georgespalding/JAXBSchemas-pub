@@ -5,7 +5,7 @@
     <parent>
         <artifactId>JAXBSchemas-common</artifactId>
         <groupId>se.omegapoint.xml.jaxb</groupId>
-        <version>1.0.0-SNAPSHOT</version>
+        <version>1.0.2</version>
     </parent>
 
     <artifactId>JAXBSchemas-${schema.name}</artifactId>
@@ -21,6 +21,22 @@
         <schema.name>xmldsig</schema.name>
         <schema.path>META-INF/schema/w3c</schema.path>
     </properties>
+
+    <repositories>
+        <repository>
+            <id>omegapoint-nexus</id>
+            <name>Sonatype nexus on localhost mirror of central</name>
+            <url>http://localhost:9091/nexus/content/groups/public</url>
+        </repository>
+    </repositories>
+
+    <pluginRepositories>
+        <pluginRepository>
+            <id>omegapoint-nexus</id>
+            <name>Sonatype nexus on localhost mirror of central</name>
+            <url>http://localhost:9091/nexus/content/groups/public</url>
+        </pluginRepository>
+    </pluginRepositories>
 
     <dependencies>
         <dependency>
