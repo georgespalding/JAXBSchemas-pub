@@ -35,6 +35,14 @@
         </repository>
     </repositories>
 
+    <pluginRepositories>
+        <pluginRepository>
+            <id>omegapoint-nexus-central</id>
+            <name>Sonatype nexus on localhost mirror of central</name>
+            <url>http://localhost:9091/nexus/content/repositories/central/</url>
+        </pluginRepository>
+    </pluginRepositories>
+
     <distributionManagement>
         <repository>
             <id>omegapoint-nexus</id>
