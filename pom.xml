@@ -4,7 +4,7 @@
     <parent>
         <artifactId>JAXBSchemas-common</artifactId>
         <groupId>se.omegapoint.xml.jaxb</groupId>
-        <version>1.0.2</version>
+        <version>1.0.3</version>
     </parent>
 
     <scm>
@@ -19,17 +19,24 @@
     <repositories>
         <repository>
             <id>omegapoint-nexus</id>
-            <name>Sonatype nexus on localhost own releases</name>
-            <url>http://localhost:9091/nexus/content/repositories/releases/</url>
+            <name>Sonatype nexus on localhost mirror of central</name>
+            <url>http://localhost:9091/nexus/content/groups/public</url>
         </repository>
     </repositories>
 
-    <distributionManagement>
-        <repository>
+    <pluginRepositories>
+        <pluginRepository>
             <id>omegapoint-nexus</id>
-            <name>Internal Releases</name>
-            <url>http://localhost:9091/nexus/content/repositories/releases/</url>
-        </repository>
-    </distributionManagement>
+            <name>Sonatype nexus on localhost mirror of central</name>
+            <url>http://localhost:9091/nexus/content/groups/public</url>
+        </pluginRepository>
+    </pluginRepositories>
 
+    <dependencies>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>1.3.2</version>
+        </dependency>
+    </dependencies>
 </project>
