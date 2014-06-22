@@ -5,7 +5,7 @@
     <parent>
         <artifactId>JAXBSchemas-common</artifactId>
         <groupId>se.omegapoint.xml.jaxb</groupId>
-        <version>1.0.0-SNAPSHOT</version>
+        <version>1.0.3</version>
     </parent>
 
     <artifactId>JAXBSchemas-saml-schema-assertion-2.0</artifactId>
@@ -20,28 +20,41 @@
     <properties>
         <schema.name>saml-schema-assertion-2.0</schema.name>
         <schema.path>META-INF/schema/oasis</schema.path>
+        <JAXBSchemas-xmldsig.version>1.0.0</JAXBSchemas-xmldsig.version>
+        <JAXBSchemas-xenc.version>1.0.0</JAXBSchemas-xenc.version>
     </properties>
+
+    <repositories>
+        <repository>
+            <id>omegapoint-nexus</id>
+            <name>Sonatype nexus on localhost mirror of central</name>
+            <url>http://localhost:9091/nexus/content/groups/public</url>
+        </repository>
+    </repositories>
+
+    <pluginRepositories>
+        <pluginRepository>
+            <id>omegapoint-nexus</id>
+            <name>Sonatype nexus on localhost mirror of central</name>
+            <url>http://localhost:9091/nexus/content/groups/public</url>
+        </pluginRepository>
+    </pluginRepositories>
 
     <dependencies>
         <dependency>
             <groupId>se.omegapoint.xml.jaxb</groupId>
             <artifactId>JAXBSchemas-util</artifactId>
-            <version>1.0.0-SNAPSHOT</version>
+            <version>1.0.2</version>
         </dependency>
         <dependency>
             <groupId>se.omegapoint.xml.jaxb</groupId>
             <artifactId>JAXBSchemas-xmldsig</artifactId>
-            <version>1.0.0-SNAPSHOT</version>
+            <version>${JAXBSchemas-xenc.version}</version>
         </dependency>
         <dependency>
             <groupId>se.omegapoint.xml.jaxb</groupId>
             <artifactId>JAXBSchemas-xenc</artifactId>
-            <version>1.0.0-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>org.jvnet.jaxb2.maven2</groupId>
-            <artifactId>maven-jaxb2-plugin</artifactId>
-            <version>0.9.0</version>
+            <version>${JAXBSchemas-xmldsig.version}</version>
         </dependency>
     </dependencies>
 
@@ -63,14 +76,14 @@
                                 <artifactItem>
                                     <groupId>se.omegapoint.xml.jaxb</groupId>
                                     <artifactId>JAXBSchemas-xmldsig</artifactId>
-                                    <version>1.0.0-SNAPSHOT</version>
+                                    <version>${JAXBSchemas-xmldsig.schema.version}</version>
                                     <outputDirectory>src/main/resources</outputDirectory>
                                     <includes>META-INF/schema/w3c/xmldsig-episode.xjb,META-INF/schema/w3c/xmldsig-core-schema.xsd</includes>
                                 </artifactItem>
                                 <artifactItem>
                                     <groupId>se.omegapoint.xml.jaxb</groupId>
                                     <artifactId>JAXBSchemas-xenc</artifactId>
-                                    <version>1.0.0-SNAPSHOT</version>
+                                    <version>${JAXBSchemas-xenc.schema.version}</version>
                                     <outputDirectory>src/main/resources</outputDirectory>
                                     <includes>META-INF/schema/w3c/xenc-episode.xjb,META-INF/schema/w3c/jaxbBindings.xjb,META-INF/schema/w3c/xenc-schema.xsd</includes>
                                 </artifactItem>
