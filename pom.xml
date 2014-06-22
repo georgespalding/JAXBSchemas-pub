@@ -9,11 +9,11 @@
 
     <scm>
         <developerConnection>scm:git:git@github.com:Omegapoint/${project.artifactId}.git</developerConnection>
-        <tag>1.0.0</tag>
+        <tag>HEAD</tag>
     </scm>
 
     <artifactId>JAXBSchemas-util</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <repositories>
