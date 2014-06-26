@@ -4,7 +4,7 @@
     <parent>
         <artifactId>JAXBSchemas-common</artifactId>
         <groupId>se.omegapoint.xml.jaxb</groupId>
-        <version>1.0.3</version>
+        <version>1.0.4</version>
     </parent>
 
     <artifactId>JAXBSchemas-saml-schema-assertion-2.0</artifactId>
@@ -18,9 +18,9 @@
 
     <properties>
         <schema.name>saml-schema-assertion-2.0</schema.name>
-        <schema.path>META-INF/schema/oasis</schema.path>
-        <JAXBSchemas-xmldsig.version>1.0.0</JAXBSchemas-xmldsig.version>
-        <JAXBSchemas-xenc.version>1.0.0</JAXBSchemas-xenc.version>
+        <schema.subdir>oasis</schema.subdir>
+        <JAXBSchemas-xmldsig.version>1.0.1</JAXBSchemas-xmldsig.version>
+        <JAXBSchemas-xenc.version>1.0.1</JAXBSchemas-xenc.version>
     </properties>
 
     <repositories>
@@ -43,7 +43,7 @@
         <dependency>
             <groupId>se.omegapoint.xml.jaxb</groupId>
             <artifactId>JAXBSchemas-util</artifactId>
-            <version>1.0.2</version>
+            <version>1.0.3</version>
         </dependency>
         <dependency>
             <groupId>se.omegapoint.xml.jaxb</groupId>
@@ -75,16 +75,16 @@
                                 <artifactItem>
                                     <groupId>se.omegapoint.xml.jaxb</groupId>
                                     <artifactId>JAXBSchemas-xmldsig</artifactId>
-                                    <version>${JAXBSchemas-xmldsig.schema.version}</version>
+                                    <version>${JAXBSchemas-xmldsig.version}</version>
                                     <outputDirectory>src/main/resources</outputDirectory>
                                     <includes>META-INF/schema/w3c/xmldsig-episode.xjb,META-INF/schema/w3c/xmldsig-core-schema.xsd</includes>
                                 </artifactItem>
                                 <artifactItem>
                                     <groupId>se.omegapoint.xml.jaxb</groupId>
                                     <artifactId>JAXBSchemas-xenc</artifactId>
-                                    <version>${JAXBSchemas-xenc.schema.version}</version>
+                                    <version>${JAXBSchemas-xenc.version}</version>
                                     <outputDirectory>src/main/resources</outputDirectory>
-                                    <includes>META-INF/schema/w3c/xenc-episode.xjb,META-INF/schema/w3c/jaxbBindings.xjb,META-INF/schema/w3c/xenc-schema.xsd</includes>
+                                    <includes>META-INF/schema/w3c/xenc-episode.xjb,META-INF/schema/w3c/xenc-schema.xsd</includes>
                                 </artifactItem>
                             </artifactItems>
                         </configuration>
@@ -94,11 +94,6 @@
             <plugin>
                 <groupId>org.jvnet.jaxb2.maven2</groupId>
                 <artifactId>maven-jaxb2-plugin</artifactId>
-                <configuration>
-                    <debug>true</debug>
-                    <catalog>src/main/resources/META-INF/schema/oasis/saml-schema-assertion-2.0.cat</catalog>
-                    <bindingDirectory>src/main/resources/META-INF/schema/w3c</bindingDirectory>
-                 </configuration>
             </plugin>
         </plugins>
     </build>
