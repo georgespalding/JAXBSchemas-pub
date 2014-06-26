@@ -7,6 +7,7 @@
     <packaging>pom</packaging>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <push.changes>false</push.changes>
     </properties>
 
     <scm>
@@ -81,8 +82,17 @@
                         <!-- see https://jax-ws-commons.java.net/jaxws-maven-plugin/wsimport-mojo.html#xjcArgs -->
                         <!-- see http://docs.oracle.com/javase/7/docs/technotes/tools/share/xjc.html -->
                         <!-- (see http://static.highsource.org/mjiip/maven-jaxb2-plugin/generate-mojo.html#episodeFile) -->
-                        <episodeFile>${project.build.directory}/generated-sources/xjc/${schema.path}/${schema.name}-episode.xjb</episodeFile>
-                        <schemaDirectory>${basedir}/src/main/resources/${schema.path}</schemaDirectory>
+                        <episodeFile>${project.build.directory}/generated-sources/xjc/META-INF/schema/${schema.subdir}/${schema.name}-episode.xjb</episodeFile>
+                        <schemaDirectory>${basedir}/src/main/resources/META-INF/schema/${schema.subdir}</schemaDirectory>
+                        <schemaIncludes>
+                            <schemaInclude>${schema.name}.xsd</schemaInclude>
+                        </schemaIncludes>
+                        <debug>true</debug>
+                        <catalog>${basedir}/src/main/resources/META-INF/schema/${schema.subdir}/${schema.name}.cat</catalog>
+                        <bindingDirectory>${basedir}/src/main/resources/META-INF/schema</bindingDirectory>
+                        <bindingIncludes>
+                            <bindingInclude>*/*.xjb</bindingInclude>
+                        </bindingIncludes>
                     </configuration>
                 </plugin>
                 <plugin>
@@ -124,64 +134,4 @@
             </resource>
         </resources>
     </build>
-
-    <!--
-        <distributionManagement>
-            <repository>
-                <id>omegapoint-nexus</id>
-                <name>Public Repositories</name>
-                <url>http://10.12.22.84:8081/nexus/content/repositories/releases</url>
-            </repository>
-        </distributionManagement>
-
-        <pluginRepositories>
-            <pluginRepository>
-                <id>omegapoint-nexus-public</id>
-                <name>Public Repositories</name>
-                <url>http://10.12.22.84:8081/nexus/content/groups/public</url>
-                <releases>
-                    <enabled>true</enabled>
-                </releases>
-                <snapshots>
-                    <enabled>false</enabled>
-                </snapshots>
-            </pluginRepository>
-        </pluginRepositories>
-        <repositories>
-            <repository>
-                <id>omegapoint-nexus-public</id>
-                <name>Public Repositories</name>
-                <url>http://10.12.22.84:8081/nexus/content/groups/public</url>
-                <releases>
-                    <enabled>true</enabled>
-                </releases>
-                <snapshots>
-                    <enabled>false</enabled>
-                </snapshots>
-            </repository>
-            <repository>
-                <id>omegapoint-nexus-snapshot</id>
-                <name>Snapshot Repositories</name>
-                <url>http://10.12.22.84:8081/nexus/content/groups/snapshots</url>
-                <releases>
-                    <enabled>false</enabled>
-                </releases>
-                <snapshots>
-                    <enabled>true</enabled>
-                </snapshots>
-            </repository>
-            <repository>
-                <id>omegapoint-nexus-releases</id>
-                <name>Public Repositories</name>
-                <url>http://10.12.22.84:8081/nexus/content/repositories/releases</url>
-                <releases>
-                    <enabled>true</enabled>
-                </releases>
-                <snapshots>
-                    <enabled>false</enabled>
-                </snapshots>
-            </repository>
-        </repositories>
-    -->
-
 </project>
