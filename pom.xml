@@ -4,10 +4,10 @@
     <parent>
         <artifactId>JAXBSchemas-common</artifactId>
         <groupId>se.omegapoint.xml.jaxb</groupId>
-        <version>1.0.2</version>
+        <version>1.0.4</version>
     </parent>
 
-    <artifactId>JAXBSchemas-${schema.name}</artifactId>
+    <artifactId>JAXBSchemas-xmldsig</artifactId>
     <version>1.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
 
@@ -17,8 +17,8 @@
     </scm>
 
     <properties>
-        <schema.name>xmldsig</schema.name>
-        <schema.path>META-INF/schema/w3c</schema.path>
+        <schema.name>xmldsig-core-schema</schema.name>
+        <schema.subdir>w3c</schema.subdir>
     </properties>
 
     <repositories>
@@ -41,7 +41,7 @@
         <dependency>
             <groupId>se.omegapoint.xml.jaxb</groupId>
             <artifactId>JAXBSchemas-util</artifactId>
-            <version>1.0.2</version>
+            <version>1.0.3</version>
         </dependency>
     </dependencies>
 
