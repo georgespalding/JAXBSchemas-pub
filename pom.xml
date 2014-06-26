@@ -4,7 +4,7 @@
     <parent>
         <artifactId>JAXBSchemas-common</artifactId>
         <groupId>se.omegapoint.xml.jaxb</groupId>
-        <version>1.0.3</version>
+        <version>1.0.4</version>
     </parent>
 
     <artifactId>JAXBSchemas-xenc</artifactId>
@@ -17,8 +17,9 @@
     </scm>
 
     <properties>
-        <schema.name>xenc</schema.name>
-        <schema.path>META-INF/schema/w3c</schema.path>
+        <schema.name>xenc-schema</schema.name>
+        <schema.subdir>w3c</schema.subdir>
+        <JAXBSchemas-xmldsig.version>1.0.1</JAXBSchemas-xmldsig.version>
     </properties>
 
     <repositories>
@@ -41,12 +42,12 @@
         <dependency>
             <groupId>se.omegapoint.xml.jaxb</groupId>
             <artifactId>JAXBSchemas-util</artifactId>
-            <version>1.0.2</version>
+            <version>1.0.3</version>
         </dependency>
         <dependency>
             <groupId>se.omegapoint.xml.jaxb</groupId>
             <artifactId>JAXBSchemas-xmldsig</artifactId>
-            <version>1.0.0</version>
+            <version>${JAXBSchemas-xmldsig.version}</version>
         </dependency>
     </dependencies>
 
@@ -68,6 +69,7 @@
                                 <artifactItem>
                                     <groupId>se.omegapoint.xml.jaxb</groupId>
                                     <artifactId>JAXBSchemas-xmldsig</artifactId>
+                                    <version>${JAXBSchemas-xmldsig.version}</version>
                                     <outputDirectory>src/main/resources</outputDirectory>
                                     <includes>META-INF/schema/w3c/xmldsig-episode.xjb,META-INF/schema/w3c/xmldsig-core-schema.xsd</includes>
                                 </artifactItem>
@@ -79,10 +81,6 @@
             <plugin>
                 <groupId>org.jvnet.jaxb2.maven2</groupId>
                 <artifactId>maven-jaxb2-plugin</artifactId>
-                <configuration>
-                    <catalog>src/main/resources/META-INF/schema/w3c/xenc-schemas.cat</catalog>
-                    <schemaExcludes><schemaExclude>xmldsig-core-schema.xsd</schemaExclude></schemaExcludes>
-                </configuration>
             </plugin>
         </plugins>
     </build>
