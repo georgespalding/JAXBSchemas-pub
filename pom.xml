@@ -1,0 +1,57 @@
+<?xml version="1.0"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <artifactId>JAXBSchemas-common</artifactId>
+        <groupId>se.omegapoint.xml.jaxb</groupId>
+        <version>1.0.4</version>
+        <relativePath/>
+    </parent>
+
+    <artifactId>JAXBSchemas-XMLSchema</artifactId>
+    <version>1.0.0</version>
+    <packaging>jar</packaging>
+
+    <scm>
+        <developerConnection>scm:git:git@github.com:Omegapoint/${project.artifactId}.git</developerConnection>
+        <tag>HEAD</tag>
+    </scm>
+
+    <properties>
+        <schema.name>XMLSchema</schema.name>
+        <schema.subdir>w3c</schema.subdir>
+    </properties>
+
+    <repositories>
+        <repository>
+            <id>omegapoint-nexus</id>
+            <name>Sonatype nexus on localhost mirror of central</name>
+            <url>http://localhost:9091/nexus/content/groups/public</url>
+        </repository>
+    </repositories>
+
+    <pluginRepositories>
+        <pluginRepository>
+            <id>omegapoint-nexus</id>
+            <name>Sonatype nexus on localhost mirror of central</name>
+            <url>http://localhost:9091/nexus/content/groups/public</url>
+        </pluginRepository>
+    </pluginRepositories>
+
+    <dependencies>
+        <dependency>
+            <groupId>se.omegapoint.xml.jaxb</groupId>
+            <artifactId>JAXBSchemas-util</artifactId>
+            <version>1.0.3</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.jvnet.jaxb2.maven2</groupId>
+                <artifactId>maven-jaxb2-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+</project>
