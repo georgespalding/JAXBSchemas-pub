@@ -5,6 +5,7 @@
         <artifactId>JAXBSchemas-common</artifactId>
         <groupId>se.omegapoint.xml.jaxb</groupId>
         <version>1.0.4</version>
+        <relativePath/>
     </parent>
 
     <artifactId>JAXBSchemas-saml-schema-assertion-2.0</artifactId>
