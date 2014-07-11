@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>se.omegapoint.xml.jaxb</groupId>
+    <version>1.0.0-SNAPSHOT</version>
+    <artifactId>JAXBSchemas</artifactId>
+    <packaging>pom</packaging>
+
+<modules>
+        <module>JAXBSchemas-common</module>
+ <module>JAXBSchemas-util</module>
+<module>JAXBSchemas-xmldsig</module>
+<module>JAXBSchemas-xenc</module>
+<module>JAXBSchemas-saml-schema-assertion-2.0</module>
+<module>JAXBSchemas-saml-schema-protocol-2.0</module>
+<module>JAXBSchemas-XMLSchemas</module>
+    </modules>
+</project>
