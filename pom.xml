@@ -77,6 +77,7 @@
                         </execution>
                     </executions>
                     <configuration>
+                        <verbose>true</verbose>
                         <generatePackage>${schema.package}</generatePackage>
                         <!-- The episode file can be used by webservices to instruct wsimport/xjc which pojos to bind -->
                         <!-- see https://jax-ws-commons.java.net/jaxws-maven-plugin/wsimport-mojo.html#xjcArgs -->
@@ -89,7 +90,7 @@
                         </schemaIncludes>
                         <debug>true</debug>
                         <catalog>${basedir}/src/main/resources/META-INF/schema/${schema.subdir}/${schema.name}.cat</catalog>
-                        <bindingDirectory>${basedir}/src/main/resources/META-INF/schema</bindingDirectory>
+                        <bindingDirectory>${basedir}/target/schemas/META-INF/schema</bindingDirectory>
                         <bindingIncludes>
                             <bindingInclude>*/*.xjb</bindingInclude>
                         </bindingIncludes>
