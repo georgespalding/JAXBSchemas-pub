@@ -7,6 +7,8 @@ import org.junit.Assert;
 import org.xml.sax.SAXException;
 import sample.schema.one.ARootElementWithNamespace;
 import sample.schema.one.ARootElementWithoutNamespace;
+import sample.schema.one.AnElementWithNamespace;
+import sample.schema.one.AnElementWithoutNamespace;
 import sample.schema.one.ObjectFactory;
 
 /**
@@ -30,28 +32,43 @@ public class SchemaOneTest {
                 true,
                 ObjectFactory.class,
                 ARootElementWithNamespace.class,
-                ARootElementWithoutNamespace.class);
+                ARootElementWithoutNamespace.class,
+                AnElementWithNamespace.class,
+                AnElementWithoutNamespace.class);
     }
 
     @Test
-    public void testMarshallAnElementWithNamespace() throws JAXBException {
+    public void testMarshallARootElementWithNamespace() throws JAXBException {
         Assert.assertEquals(
                 "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><ns2:aRootElementWithNamespace xmlns:ns2=\"http://omegapoint.se/arootelementwithnamespace\"/>",
                 jaxbHelper.marshall(new ARootElementWithNamespace()).getString());
     }
 
     @Test
-    public void testMarshallFragmentAnElementWithNamespace() throws JAXBException {
+    public void testMarshallFragmentARootElementWithNamespace() throws JAXBException {
         Assert.assertEquals(
                 "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><ns2:aRootElementWithNamespace xmlns:ns2=\"http://omegapoint.se/arootelementwithnamespace\"/>",
                 jaxbHelper.marshallFragment(new ARootElementWithNamespace()).getString());
     }
 
     @Test
-    public void testMarshallAnElementWithoutNamespace() throws JAXBException {
+    public void testMarshallARootElementWithoutNamespace() throws JAXBException {
         Assert.assertEquals(
                 "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><aRootElementWithoutNamespace xmlns:ns2=\"http://omegapoint.se/arootelementwithnamespace\"/>",
                 jaxbHelper.marshallFragment(new ARootElementWithoutNamespace()).getString());
     }
 
+    @Test
+    public void testMarshallAnElementWithoutNamespace() throws JAXBException {
+        Assert.assertEquals(
+                "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><ns3:AnElementWithoutNamespace xmlns:ns2=\"http://omegapoint.se/arootelementwithnamespace\" xmlns:ns3=\"##default\"/>",
+                jaxbHelper.marshallFragment(new AnElementWithoutNamespace()).getString());
+    }
+
+    @Test
+    public void testMarshallAnElementWithNamespace() throws JAXBException {
+        Assert.assertEquals(
+                "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><ns3:AnElementWithNamespace xmlns:ns2=\"http://omegapoint.se/arootelementwithnamespace\" xmlns:ns3=\"http://omegapoint.se/anelementwithnamespace\"/>",
+                jaxbHelper.marshallFragment(new AnElementWithNamespace()).getString());
+    }
 }

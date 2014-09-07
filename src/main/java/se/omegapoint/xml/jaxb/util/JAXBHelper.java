@@ -91,7 +91,7 @@ public class JAXBHelper<E> {
         Annotation ann = JAXBHelper.getAnnotation(classT, XmlType.class);
         if(ann!=null){
             String ns = ((XmlType)ann).namespace();
-            if(ns!=null && ns.isEmpty()){
+            if(ns!=null && !ns.isEmpty()){
                 return ns;
             }
         }
@@ -99,7 +99,7 @@ public class JAXBHelper<E> {
         ann = JAXBHelper.getAnnotation(classT.getPackage(), XmlSchema.class);
         if(ann!=null){
             String ns = ((XmlSchema)ann).namespace();
-            if(ns!=null && ns.isEmpty()){
+            if(ns!=null && !ns.isEmpty()){
                 return ns;
             }
         }
@@ -186,7 +186,7 @@ public class JAXBHelper<E> {
         } else {
             // Wrap it up in a (possibly dummy) JAXBElement
             String nsURI = getNamespace(element.getClass());
-            JAXBElement<T> wrapper = new JAXBElement<>(new QName(nsURI, getClass().getSimpleName()), (Class<T>)classT, element);
+            JAXBElement<T> wrapper = new JAXBElement<>(new QName(nsURI, element.getClass().getSimpleName()), (Class<T>)classT, element);
             return new MarshallingPromise(marshaller, wrapper);
         }
     }
