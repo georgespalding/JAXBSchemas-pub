@@ -9,7 +9,10 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.bind.ValidationEventHandler;
+import javax.xml.bind.annotation.XmlRegistry;
+import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSchema;
+import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.helpers.DefaultValidationEventHandler;
 import javax.xml.namespace.QName;
 import javax.xml.stream.XMLInputFactory;
@@ -26,206 +29,209 @@ import java.io.StringReader;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.lang.annotation.Annotation;
+import java.lang.reflect.AnnotatedElement;
 import java.net.URL;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class JAXBHelper<OF,E> {
-	
+public class JAXBHelper<E> {
+
+    public static enum MarshallOption{
+        Validate,
+        Fragment,
+        Format;
+    }
+
 	public static XMLInputFactory xif=XMLInputFactory.newFactory();
-	
+
     static {
         xif.setProperty(XMLInputFactory.IS_NAMESPACE_AWARE, true);
         xif.setProperty(XMLInputFactory.IS_VALIDATING, true);
     }
 
-    // Note! Subclasses will be another category!!!
-    private Logger log =  Logger.getLogger(getClass().getName());
+    private final ValidationEventHandler defaultValidationHandler = new DefaultValidationEventHandler();
 
-    public final OF objectFactory;
-    public final Class<E> rootElementClass;
-    public final JAXBContext jaxbCtx;
-    public final Schema xmlSchema;
-    private final ValidationEventHandler defaultValidationHandler=new DefaultValidationEventHandler();
-
-    public JAXBHelper(OF objectFactory,Class<E> rootElementClass, String... schemaResourcePaths) throws JAXBException, SAXException {
-        this.objectFactory = objectFactory;
-        this.rootElementClass = rootElementClass;
-
-        jaxbCtx = JAXBContext.newInstance(objectFactory.getClass());
+    public static Schema createSchema(String... schemaResourcePaths) throws SAXException {
         SchemaFactory sf = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+
         // För att få validering mot orginalschemat att fungera måste package-info.java raderas från den genererade koden
+        // OM det är så att schemat saknar namespace
         Source [] sources = new Source[schemaResourcePaths.length];
         int i=0;
         for(String schemaResourcePath:schemaResourcePaths){
-            URL resource=getClass().getClassLoader().getResource(schemaResourcePath);
+            URL resource=Thread.currentThread().getContextClassLoader().getResource(schemaResourcePath);
             if(resource==null){
                 throw new NullPointerException("XML Schema resource '"+schemaResourcePath+"' was not found in classpath.");
             }
             sources[i++] = new StreamSource(resource.toExternalForm());
         }
-        xmlSchema = sf.newSchema(sources);
+        return sf.newSchema(sources);
+    }
+
+    public static Annotation getAnnotation(AnnotatedElement ae, Class annotationClass){
+        //Assert arguments
+        if(!annotationClass.isAnnotation()){
+            throw new IllegalArgumentException("Supplied class '"+annotationClass.getName()+"' is not an annotation!");
+        }
+
+        for(Annotation annotation: ae.getAnnotations()){
+            if(annotation.annotationType() == annotationClass){
+                // TODO Jdk 8 supports multiple annotations of same type...
+                return annotation;
+            }
+        }
+        return null;
+    }
+
+    public static boolean hasAnnotation(AnnotatedElement ae, Class annotationClass){
+        return null!=getAnnotation(ae, annotationClass);
+    }
+
+    public static String getNamespace(Class<?> classT){
+        Annotation ann = JAXBHelper.getAnnotation(classT, XmlType.class);
+        if(ann!=null){
+            String ns = ((XmlType)ann).namespace();
+            if(ns!=null && ns.isEmpty()){
+                return ns;
+            }
+        }
+
+        ann = JAXBHelper.getAnnotation(classT.getPackage(), XmlSchema.class);
+        if(ann!=null){
+            String ns = ((XmlSchema)ann).namespace();
+            if(ns!=null && ns.isEmpty()){
+                return ns;
+            }
+        }
+
+        return "##default";
+    }
+
+    // Note! Subclasses will be another category!!!
+    private Logger log =  Logger.getLogger(getClass().getName());
+
+    public final Class<E> rootElementClass;
+    public final JAXBContext jaxbCtx;
+    public final Schema xmlSchema;
+    public final boolean validateByDefault;
+
+    public JAXBHelper(Class<E> rootElementClass, Schema schema, boolean validate,Class ... objectFactoryClasses) throws JAXBException, SAXException {
+        for(Class each:objectFactoryClasses){
+            if("ObjectFactory".equals(each.getSimpleName()) && !hasAnnotation(each, XmlRegistry.class)) {
+                throw new IllegalArgumentException("Supplied Class '"+each.getName()+"' is not an @XmlRegistry. (Should be an ObjectFactory).");
+            }
+        }
+
+        this.rootElementClass = rootElementClass;
+        this.jaxbCtx = JAXBContext.newInstance(objectFactoryClasses);
+        this.xmlSchema = schema;
+        this.validateByDefault = validate;
     }
 
 
-    public E unmarshal(InputStream in) throws JAXBException, XMLStreamException {
-        return unmarshal(in, rootElementClass, defaultValidationHandler);
+    public TypedUnmarshaller<E> unmarshaller() throws JAXBException {
+        return unmarshaller(rootElementClass, validateByDefault? defaultValidationHandler: null);
     }
 
-    public <T> T unmarshal(InputStream in, Class<T> elementClass, ValidationEventHandler validationEventHandler) throws JAXBException, XMLStreamException {
-        return unmarshal(xif.createXMLStreamReader(in), elementClass, validationEventHandler);
+    public TypedUnmarshaller<E> unmarshaller(boolean validate) throws JAXBException {
+        return unmarshaller(rootElementClass, validate? defaultValidationHandler: null);
     }
 
-    public E unmarshal(byte [] incoming) throws JAXBException, XMLStreamException {
-        return unmarshal(incoming, rootElementClass, defaultValidationHandler);
+    public TypedUnmarshaller<E> unmarshaller(ValidationEventHandler validator) throws JAXBException {
+        return unmarshaller(rootElementClass, validator);
     }
 
-    public E unmarshal(byte [] incoming, ValidationEventHandler validationEventHandler) throws JAXBException, XMLStreamException {
-        return unmarshal(incoming, rootElementClass, validationEventHandler);
+    public <T> TypedUnmarshaller<T> unmarshaller(Class<T> t) throws JAXBException {
+        return unmarshaller(t, validateByDefault? defaultValidationHandler: null);
     }
 
-    public <T> T unmarshal(byte [] incoming, Class<T> elementClass, boolean validate) throws JAXBException, XMLStreamException {
-        return unmarshal(incoming,elementClass, validate?defaultValidationHandler:null);
+    public <T> TypedUnmarshaller<T> unmarshaller(Class<T> t, boolean validate) throws JAXBException {
+        return unmarshaller(t, validate? defaultValidationHandler: null);
     }
 
-    public <T> T unmarshal(byte [] incoming, Class<T> elementClass, ValidationEventHandler validationEventHandler) throws JAXBException, XMLStreamException {
-        return unmarshal(new ByteArrayInputStream(incoming),elementClass, validationEventHandler);
-    }
-
-    public E unmarshal(String incoming) throws JAXBException, XMLStreamException {
-        return unmarshal(incoming, rootElementClass, defaultValidationHandler);
-    }
-
-    public E unmarshal(String incoming,ValidationEventHandler validationEventHandler) throws JAXBException, XMLStreamException {
-        return unmarshal(incoming, rootElementClass, validationEventHandler);
-    }
-
-    public <T> T unmarshal(String incoming, Class<T> elementClass, boolean validate) throws JAXBException, XMLStreamException {
-        return unmarshal(incoming,elementClass, validate?defaultValidationHandler:null);
-    }
-
-
-    public <T> T unmarshal(String incoming, Class<T> elementClass, ValidationEventHandler validationEventHandler) throws JAXBException, XMLStreamException {
-        return unmarshal(xif.createXMLStreamReader(new StringReader(incoming)),elementClass, validationEventHandler);
-    }
-
-
-    public <T> T unmarshal(XMLStreamReader rawReader, Class<T> elementClass ,boolean validate) throws JAXBException {
-        return unmarshal(rawReader, elementClass, validate?defaultValidationHandler:null);
-    }
-
-
-    public E unmarshal(XMLStreamReader rawReader) throws JAXBException, XMLStreamException {
-        return unmarshal(rawReader, rootElementClass, defaultValidationHandler);
-    }
-
-
-    public <T> T unmarshal(XMLStreamReader rawReader, Class<T> elementClass ,ValidationEventHandler validationEventHandler) throws JAXBException {
-        long start=System.currentTimeMillis();
+    public <T> TypedUnmarshaller<T> unmarshaller(Class<T> t, ValidationEventHandler validator) throws JAXBException {
         Unmarshaller unmarshaller = jaxbCtx.createUnmarshaller();
-        if(validationEventHandler != null){
-            unmarshaller.setEventHandler(validationEventHandler);
+        if(null!=validator){
+            unmarshaller.setEventHandler(validator);
             unmarshaller.setSchema(xmlSchema);
         }
-
-        T result = unmarshaller.unmarshal(rawReader, elementClass).getValue();
-        if(log.isLoggable(Level.CONFIG)){
-            log.log(Level.CONFIG,"Unmarshalled '"+elementClass.getSimpleName()+"' from XMLStreamReader in "+(System.currentTimeMillis()-start)+"ms");
-        }
-        return result;
+        return new TypedUnmarshaller(unmarshaller, t);
     }
 
-    public Object unmarshalRaw(String incoming, boolean validate) throws JAXBException, XMLStreamException {
-        return unmarshalRaw(xif.createXMLStreamReader(new StringReader(incoming)), validate);
-    }
 
-    public Object unmarshalRaw(XMLStreamReader rawReader, boolean validate) throws JAXBException {
-        long start=System.currentTimeMillis();
-        Unmarshaller unmarshaller = jaxbCtx.createUnmarshaller();
-        if(validate){
-            unmarshaller.setEventHandler(new javax.xml.bind.helpers.DefaultValidationEventHandler());
-            unmarshaller.setSchema(xmlSchema);
-        }
-
-        Object result = unmarshaller.unmarshal(rawReader);
-        if(result instanceof JAXBElement){
-            result=((JAXBElement) result).getValue();
-        }
-        if(log.isLoggable(Level.CONFIG)){
-            log.log(Level.CONFIG,"Unmarshalled '"+result.getClass().getSimpleName()+"' from XMLStreamReader in "+(System.currentTimeMillis()-start)+"ms");
-        }
-        return result;
-    }
-
-    public String marshal(E rootElement) throws JAXBException {
-        return marshal(rootElement,true, false);
+    /**
+     * Shortcut method for marshalling objects of one type, with no posibility to reuse internal marshaller for other types.
+     * @param element
+     * @param options
+     * @return
+     */
+    // perhaps a bit faster than marshallFragment?
+    public MarshallingPromise marshall(E element, MarshallOption... options) throws JAXBException {
+        return new MarshallingPromise(createMarshaller(options), element);
     }
 
     /**
-     * For marshalling root elements constructed with the ObjectFactory.
-     * @param wrappedRootElement
+     * Shortcut method for marshalling objects of one type, with no posibility to reuse internal marshaller for other types.
+     * @param element
+     * @param options
+     * @return
+     */
+    public <T> MarshallingPromise marshallFragment(T element, MarshallOption... options) throws JAXBException {
+        Class<?> classT = element.getClass();
+        Marshaller marshaller = createMarshaller(options);
+        if(element instanceof JAXBElement
+                || JAXBHelper.hasAnnotation(element.getClass(), XmlRootElement.class)){
+            // Good to go.
+            return new MarshallingPromise(marshaller, element);
+        } else {
+            // Wrap it up in a (possibly dummy) JAXBElement
+            String nsURI = getNamespace(element.getClass());
+            JAXBElement<T> wrapper = new JAXBElement<>(new QName(nsURI, getClass().getSimpleName()), (Class<T>)classT, element);
+            return new MarshallingPromise(marshaller, wrapper);
+        }
+    }
+
+    /**
+     * This gives you a reusable
+     * @param options
      * @return
      * @throws JAXBException
      */
-    public String marshal(JAXBElement<E> wrappedRootElement) throws JAXBException {
-        return marshal(wrappedRootElement,true, false);
+    public TypedMarshaller<E> marshaller(MarshallOption... options) throws JAXBException {
+        return marshaller(rootElementClass, options);
     }
 
-    public <T> String marshalFragment(T element) throws JAXBException {
-        Class<?> classT = element.getClass();
-        String nsURI = "";
-        for(Annotation annotation: classT.getPackage().getAnnotations()){
-            if(annotation.annotationType() == XmlSchema.class){
-                nsURI = ((XmlSchema)annotation).namespace();
-                break;
-            }
-		}
-		
-		return marshal(new JAXBElement<T>(new QName(nsURI, classT.getSimpleName()), (Class<T>)classT, element), false, true);
-	}
+    /**
+     * Use this to marshall bits of xml originating from the associated schemas that in themselves are not a complete document.
+     * @param <T> The type to be marshalled, can be a JAXBElement, or a Type
+     * @param options options for the marshaller. Note: setting MarshallOption.Validate will fail if the element is not a top-level element in the schema
+     * @return
+     */
+    public <T> TypedMarshaller<T> marshaller(Class<T> type, MarshallOption... options) throws JAXBException {
+        return new TypedMarshaller<>(
+                createMarshaller(options),
+                type);
+    }
 
-	public <T> String marshalFragment(JAXBElement<T> element, boolean validate) throws JAXBException {
-		return marshal(element,validate,true);
-	}
-
-	public <T> String marshal(T element, boolean validate) throws JAXBException {
-		return marshal(element,validate,false);
-	}
-
-	public <T> String marshal(T element, boolean validate, boolean fragment) throws JAXBException {
-    StringWriter sw=new StringWriter();
-		marshal(element, validate, fragment, sw);
-		return sw.toString();
-	}
-
-	public Marshaller createMarshaller(boolean validate, boolean fragment) throws JAXBException {
+	public Marshaller createMarshaller(MarshallOption... options) throws JAXBException {
 		Marshaller m=jaxbCtx.createMarshaller();
 		m.setProperty(Marshaller.JAXB_ENCODING, "UTF-8");
-		m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-		if(fragment){
-			m.setProperty(Marshaller.JAXB_FRAGMENT, fragment);
-		}
-
-		if(validate){
-			m.setEventHandler(new javax.xml.bind.helpers.DefaultValidationEventHandler());
-			m.setSchema(xmlSchema);
+		for(MarshallOption option:options){
+            switch(option){
+			    case Validate:
+                    m.setEventHandler(defaultValidationHandler);
+                    m.setSchema(xmlSchema);
+                    break;
+                case Fragment:
+                    m.setProperty(Marshaller.JAXB_FRAGMENT, true);
+                    break;
+                case Format:
+                    m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+                    break;
+            }
 		}
 
 		return m;
-	}
-
-	public <T> void marshal(T element, boolean validate, boolean fragment, Writer dest) throws JAXBException {
-		long start=System.currentTimeMillis();
-		Marshaller m=createMarshaller(validate, fragment);
-		m.marshal(element, dest);
-
-		if(log.isLoggable(Level.CONFIG)){
-			log.log(Level.CONFIG,"Marshalled '"+rootElementClass.getSimpleName()+"' to String in "+(System.currentTimeMillis()-start)+"ms");
-		}
-	}
-
-	public OF getObjectFactory(){
-		return objectFactory;
 	}
 
 }

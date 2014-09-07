@@ -4,7 +4,7 @@
     <parent>
         <artifactId>JAXBSchemas-common</artifactId>
         <groupId>se.omegapoint.xml.jaxb</groupId>
-        <version>1.0.4</version>
+        <version>1.0.6-SNAPSHOT</version>
         <relativePath/>
     </parent>
 
@@ -17,20 +17,18 @@
     <version>1.0.4-SNAPSHOT</version>
     <packaging>jar</packaging>
 
-    <repositories>
-        <repository>
-            <id>omegapoint-nexus</id>
-            <name>Sonatype nexus on localhost mirror of central</name>
-            <url>http://localhost:9091/nexus/content/groups/public</url>
-        </repository>
-    </repositories>
+    <dependencies>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.codehaus.woodstox</groupId>
+            <artifactId>woodstox-core-asl</artifactId>
+            <version>4.4.0</version>
+            <scope>test</scope>
+        </dependency>
 
-    <pluginRepositories>
-        <pluginRepository>
-            <id>omegapoint-nexus</id>
-            <name>Sonatype nexus on localhost mirror of central</name>
-            <url>http://localhost:9091/nexus/content/groups/public</url>
-        </pluginRepository>
-    </pluginRepositories>
-
+    </dependencies>
 </project>
