@@ -16,33 +16,19 @@ import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.helpers.DefaultValidationEventHandler;
 import javax.xml.namespace.QName;
 import javax.xml.stream.XMLInputFactory;
-import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.XMLStreamReader;
 import javax.xml.transform.Source;
 import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
-import java.io.StringReader;
-import java.io.StringWriter;
-import java.io.Writer;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.AnnotatedElement;
 import java.net.URL;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class JAXBHelper<E> {
 
-    public static enum MarshallOption{
-        Validate,
-        Fragment,
-        Format;
-    }
-
-	public static XMLInputFactory xif=XMLInputFactory.newFactory();
+    public static XMLInputFactory xif=XMLInputFactory.newFactory();
 
     static {
         xif.setProperty(XMLInputFactory.IS_NAMESPACE_AWARE, true);
@@ -104,7 +90,20 @@ public class JAXBHelper<E> {
             }
         }
 
-        return "##default";
+        return "";
+    }
+
+    public static <T> Object toMarshallableObject(T element){
+        final Class<?> classT = element.getClass();
+        if(element instanceof JAXBElement
+                || JAXBHelper.hasAnnotation(element.getClass(), XmlRootElement.class)){
+            // Good to go.
+            return element;
+        } else {
+            // Wrap it up in a (possibly dummy) JAXBElement
+            final String nsURI = getNamespace(element.getClass());
+            return new JAXBElement<>(new QName(nsURI, element.getClass().getSimpleName()), (Class<T>)classT, element);
+        }
     }
 
     // Note! Subclasses will be another category!!!
@@ -129,45 +128,41 @@ public class JAXBHelper<E> {
     }
 
 
-    public TypedUnmarshaller<E> unmarshaller() throws JAXBException {
-        return unmarshaller(rootElementClass, validateByDefault? defaultValidationHandler: null);
+    public UnmarshalPromise<E> unmarshal() throws JAXBException {
+        return unmarshal(rootElementClass, validateByDefault ? defaultValidationHandler : null);
     }
 
-    public TypedUnmarshaller<E> unmarshaller(boolean validate) throws JAXBException {
-        return unmarshaller(rootElementClass, validate? defaultValidationHandler: null);
+    public UnmarshalPromise<E> unmarshal(boolean validate) throws JAXBException {
+        return unmarshal(rootElementClass, validate ? defaultValidationHandler : null);
     }
 
-    public TypedUnmarshaller<E> unmarshaller(ValidationEventHandler validator) throws JAXBException {
-        return unmarshaller(rootElementClass, validator);
+    public UnmarshalPromise<E> unmarshal(ValidationEventHandler validator) throws JAXBException {
+        return unmarshal(rootElementClass, validator);
     }
 
-    public <T> TypedUnmarshaller<T> unmarshaller(Class<T> t) throws JAXBException {
-        return unmarshaller(t, validateByDefault? defaultValidationHandler: null);
+    public <T> UnmarshalPromise<T> unmarshal(Class<T> t, boolean validate) throws JAXBException {
+        return unmarshal(t, validate? defaultValidationHandler: null);
     }
 
-    public <T> TypedUnmarshaller<T> unmarshaller(Class<T> t, boolean validate) throws JAXBException {
-        return unmarshaller(t, validate? defaultValidationHandler: null);
-    }
-
-    public <T> TypedUnmarshaller<T> unmarshaller(Class<T> t, ValidationEventHandler validator) throws JAXBException {
+    public <T> UnmarshalPromise<T> unmarshal(Class<T> t, ValidationEventHandler validator) throws JAXBException {
         Unmarshaller unmarshaller = jaxbCtx.createUnmarshaller();
         if(null!=validator){
             unmarshaller.setEventHandler(validator);
             unmarshaller.setSchema(xmlSchema);
         }
-        return new TypedUnmarshaller(unmarshaller, t);
+
+        return new UnmarshalPromise(unmarshaller, t);
     }
 
-
     /**
-     * Shortcut method for marshalling objects of one type, with no posibility to reuse internal marshaller for other types.
+     * Shortcut method for marshalling objects of one type, with no possibility to reuse internal marshaller for other types.
      * @param element
      * @param options
      * @return
      */
     // perhaps a bit faster than marshallFragment?
-    public MarshallingPromise marshall(E element, MarshallOption... options) throws JAXBException {
-        return new MarshallingPromise(createMarshaller(options), element);
+    public MarshalPromise marshal(E element, MarshallOption... options) throws JAXBException {
+        return new MarshalPromise(createMarshaller(options), element);
     }
 
     /**
@@ -176,51 +171,23 @@ public class JAXBHelper<E> {
      * @param options
      * @return
      */
-    public <T> MarshallingPromise marshallFragment(T element, MarshallOption... options) throws JAXBException {
-        Class<?> classT = element.getClass();
-        Marshaller marshaller = createMarshaller(options);
-        if(element instanceof JAXBElement
-                || JAXBHelper.hasAnnotation(element.getClass(), XmlRootElement.class)){
-            // Good to go.
-            return new MarshallingPromise(marshaller, element);
-        } else {
-            // Wrap it up in a (possibly dummy) JAXBElement
-            String nsURI = getNamespace(element.getClass());
-            JAXBElement<T> wrapper = new JAXBElement<>(new QName(nsURI, element.getClass().getSimpleName()), (Class<T>)classT, element);
-            return new MarshallingPromise(marshaller, wrapper);
-        }
-    }
-
-    /**
-     * This gives you a reusable
-     * @param options
-     * @return
-     * @throws JAXBException
-     */
-    public TypedMarshaller<E> marshaller(MarshallOption... options) throws JAXBException {
-        return marshaller(rootElementClass, options);
-    }
-
-    /**
-     * Use this to marshall bits of xml originating from the associated schemas that in themselves are not a complete document.
-     * @param <T> The type to be marshalled, can be a JAXBElement, or a Type
-     * @param options options for the marshaller. Note: setting MarshallOption.Validate will fail if the element is not a top-level element in the schema
-     * @return
-     */
-    public <T> TypedMarshaller<T> marshaller(Class<T> type, MarshallOption... options) throws JAXBException {
-        return new TypedMarshaller<>(
+    public <T> MarshalPromise marshalFragment(T element, MarshallOption... options) throws JAXBException {
+        return new MarshalPromise(
                 createMarshaller(options),
-                type);
+                toMarshallableObject(element));
     }
 
 	public Marshaller createMarshaller(MarshallOption... options) throws JAXBException {
 		Marshaller m=jaxbCtx.createMarshaller();
 		m.setProperty(Marshaller.JAXB_ENCODING, "UTF-8");
+        boolean validate = validateByDefault;
 		for(MarshallOption option:options){
             switch(option){
 			    case Validate:
-                    m.setEventHandler(defaultValidationHandler);
-                    m.setSchema(xmlSchema);
+                    validate = true;
+                    break;
+                case NoValidate:
+                    validate = false;
                     break;
                 case Fragment:
                     m.setProperty(Marshaller.JAXB_FRAGMENT, true);
@@ -230,6 +197,11 @@ public class JAXBHelper<E> {
                     break;
             }
 		}
+
+        if(validate){
+            m.setEventHandler(defaultValidationHandler);
+            m.setSchema(xmlSchema);
+        }
 
 		return m;
 	}

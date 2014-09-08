@@ -1,7 +1,10 @@
 package se.omegapoint.xml.jaxb.util;
 
+import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.namespace.QName;
 import javax.xml.stream.XMLEventWriter;
 import javax.xml.stream.XMLStreamWriter;
 import javax.xml.transform.Result;
@@ -20,11 +23,11 @@ import org.xml.sax.ContentHandler;
  * Time: 21:45
  * To change this template use File | Settings | File Templates.
  */
-public class MarshallingPromise {
+public class MarshalPromise {
     private final Marshaller marshaller;
     private final Object elem;
 
-    public MarshallingPromise(Marshaller marshaller, Object elem) {
+    public MarshalPromise(Marshaller marshaller, Object elem) {
         this.marshaller = marshaller;
         this.elem = elem;
     }
@@ -72,4 +75,20 @@ public class MarshallingPromise {
         to(baos);
         return baos.toByteArray();
     }
+
+    /**
+     * Utility to reuse the wrapped marshaller.
+     * N.b. the same Marshaller will be used, which means that it is not thread safe.
+     *
+     * @param element
+     * @param <T>
+     * @return
+     * @throws JAXBException
+     */
+    public <T> MarshalPromise marshaller(T element) throws JAXBException {
+        return new MarshalPromise(
+                marshaller,
+                JAXBHelper.toMarshallableObject(element));
+    }
+
 }

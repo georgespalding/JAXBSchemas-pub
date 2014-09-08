@@ -41,34 +41,44 @@ public class SchemaOneTest {
     public void testMarshallARootElementWithNamespace() throws JAXBException {
         Assert.assertEquals(
                 "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><ns2:aRootElementWithNamespace xmlns:ns2=\"http://omegapoint.se/arootelementwithnamespace\"/>",
-                jaxbHelper.marshall(new ARootElementWithNamespace()).getString());
+                jaxbHelper.marshal(new ARootElementWithNamespace()).getString());
     }
 
     @Test
     public void testMarshallFragmentARootElementWithNamespace() throws JAXBException {
         Assert.assertEquals(
                 "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><ns2:aRootElementWithNamespace xmlns:ns2=\"http://omegapoint.se/arootelementwithnamespace\"/>",
-                jaxbHelper.marshallFragment(new ARootElementWithNamespace()).getString());
+                jaxbHelper.marshalFragment(new ARootElementWithNamespace()).getString());
     }
 
     @Test
     public void testMarshallARootElementWithoutNamespace() throws JAXBException {
         Assert.assertEquals(
                 "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><aRootElementWithoutNamespace xmlns:ns2=\"http://omegapoint.se/arootelementwithnamespace\"/>",
-                jaxbHelper.marshallFragment(new ARootElementWithoutNamespace()).getString());
+                jaxbHelper.marshalFragment(new ARootElementWithoutNamespace()).getString());
     }
 
     @Test
     public void testMarshallAnElementWithoutNamespace() throws JAXBException {
         Assert.assertEquals(
-                "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><ns3:AnElementWithoutNamespace xmlns:ns2=\"http://omegapoint.se/arootelementwithnamespace\" xmlns:ns3=\"##default\"/>",
-                jaxbHelper.marshallFragment(new AnElementWithoutNamespace()).getString());
+                "<ns3:AnElementWithoutNamespace" +
+                        " xmlns:ns2=\"http://omegapoint.se/arootelementwithnamespace\"" +
+                        " xmlns:ns3=\"##default\"/>",
+                jaxbHelper.marshalFragment(new AnElementWithoutNamespace(),
+                        MarshallOption.NoValidate,
+                        MarshallOption.Format,
+                        MarshallOption.Fragment).getString());
     }
 
     @Test
     public void testMarshallAnElementWithNamespace() throws JAXBException {
         Assert.assertEquals(
-                "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><ns3:AnElementWithNamespace xmlns:ns2=\"http://omegapoint.se/arootelementwithnamespace\" xmlns:ns3=\"http://omegapoint.se/anelementwithnamespace\"/>",
-                jaxbHelper.marshallFragment(new AnElementWithNamespace()).getString());
+                "<ns3:AnElementWithNamespace" +
+                        " xmlns:ns2=\"http://omegapoint.se/arootelementwithnamespace\"" +
+                        " xmlns:ns3=\"http://omegapoint.se/anelementwithnamespace\"/>",
+                jaxbHelper.marshalFragment(new AnElementWithNamespace(),
+                        MarshallOption.NoValidate,
+                        MarshallOption.Format,
+                        MarshallOption.Fragment).getString());
     }
 }

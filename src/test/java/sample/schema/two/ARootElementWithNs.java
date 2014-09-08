@@ -1,6 +1,7 @@
 package sample.schema.two;
 
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
 
 /**
  * Created with IntelliJ IDEA.
@@ -10,5 +11,6 @@ import javax.xml.bind.annotation.XmlRootElement;
  * To change this template use File | Settings | File Templates.
  */
 @XmlRootElement(namespace = "http://omegapoint.se/arootelementwithns")
+@XmlType(namespace = "http://omegapoint.se/arootelementwithns")
 public class ARootElementWithNs {
 }

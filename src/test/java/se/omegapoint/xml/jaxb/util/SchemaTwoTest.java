@@ -15,41 +15,71 @@ import sample.schema.two.*;
  * To change this template use File | Settings | File Templates.
  */
 public class SchemaTwoTest {
-    private static JAXBHelper<ARootElementWithNs> jaxbHelper;
+    private static JAXBHelper<ARootElementWithoutNs> jaxbHelper;
 
     @BeforeClass
     public static void createJAXBHelper() throws SAXException, JAXBException {
         jaxbHelper = new JAXBHelper(
-                ARootElementWithNs.class,
+                ARootElementWithoutNs.class,
                 JAXBHelper.createSchema(
-                        "META-INF/schema/one/schema1.xsd",
-                        "META-INF/schema/one/schema2.xsd",
-                        "META-INF/schema/one/schema3.xsd"),
+                        "META-INF/schema/two/schema1.xsd",
+                        "META-INF/schema/two/schema2.xsd",
+                        "META-INF/schema/two/schema3.xsd"),
                 true,
                 ObjectFactory.class,
                 ARootElementWithNs.class,
-                ARootElementWithoutNs.class);
+                ARootElementWithoutNs.class,
+                AnElementWithNs.class,
+                AnElementWithoutNs.class);
     }
 
     @Test
-    public void testMarshallAnElementWithNamespace() throws JAXBException {
+    public void testMarshallFragment_ARootElementWithNs() throws JAXBException {
         Assert.assertEquals(
-                "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><ns2:aRootElementWithNamespace xmlns:ns2=\"http://omegapoint.se/arootelementwithnamespace\"/>",
-                jaxbHelper.marshall(new ARootElementWithNs()).getString());
+                "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n" +
+                        "<aRootElementWithNs" +
+                        " xmlns:ns2=\"http://omegapoint.se/packagens\"" +
+                        " xmlns=\"http://omegapoint.se/arootelementwithns\"/>\n",
+                jaxbHelper.marshalFragment(
+                        new ARootElementWithNs(),
+                        MarshallOption.Format,
+                        MarshallOption.Validate).getString());
     }
 
     @Test
-    public void testMarshallFragmentAnElementWithNamespace() throws JAXBException {
+    public void testMarshall_ARootElementWitouthNs() throws JAXBException {
         Assert.assertEquals(
-                "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><ns2:aRootElementWithNamespace xmlns:ns2=\"http://omegapoint.se/arootelementwithnamespace\"/>",
-                jaxbHelper.marshallFragment(new ARootElementWithNs()).getString());
+                "<aRootElementWithNs" +
+                        " xmlns:ns2=\"http://omegapoint.se/packagens\"" +
+                        " xmlns=\"http://omegapoint.se/arootelementwithns\"/>",
+                jaxbHelper.marshal(new ARootElementWithoutNs(),
+                        MarshallOption.Format,
+                        MarshallOption.Validate).getString());
     }
 
     @Test
-    public void testMarshallAnElementWithoutNamespace() throws JAXBException {
+    public void testMarshallFragment_AnElementWithNs() throws JAXBException {
         Assert.assertEquals(
-                "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><aRootElementWithoutNamespace xmlns:ns2=\"http://omegapoint.se/arootelementwithnamespace\"/>",
-                jaxbHelper.marshallFragment(new ARootElementWithoutNs()).getString());
+                "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n" +
+                        "<ns3:AnElementWithNs xmlns:ns2=\"http://omegapoint.se/packagens\"" +
+                        " xmlns=\"http://omegapoint.se/arootelementwithns\"" +
+                        " xmlns:ns3=\"http://omegapoint.se/anelementwithns\"/>\n",
+                jaxbHelper.marshalFragment(new AnElementWithNs(),
+                        MarshallOption.Format,
+                        MarshallOption.NoValidate).getString());
+    }
+
+    @Test
+    public void testMarshallFragment_AnElementWithoutNs() throws JAXBException {
+        Assert.assertEquals(
+                "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n" +
+                        "<ns3:AnElementWithoutNs" +
+                        " xmlns:ns2=\"http://omegapoint.se/packagens\"" +
+                        " xmlns=\"http://omegapoint.se/arootelementwithns\"" +
+                        " xmlns:ns3=\"##default\"/>\n",
+                jaxbHelper.marshalFragment(new AnElementWithoutNs(),
+                        MarshallOption.Format,
+                        MarshallOption.NoValidate).getString());
     }
 
 }
