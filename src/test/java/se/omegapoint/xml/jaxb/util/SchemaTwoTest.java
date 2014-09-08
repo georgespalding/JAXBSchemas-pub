@@ -24,7 +24,8 @@ public class SchemaTwoTest {
                 JAXBHelper.createSchema(
                         "META-INF/schema/two/schema1.xsd",
                         "META-INF/schema/two/schema2.xsd",
-                        "META-INF/schema/two/schema3.xsd"),
+                        "META-INF/schema/two/schema3.xsd"
+                        ),
                 true,
                 ObjectFactory.class,
                 ARootElementWithNs.class,
@@ -49,9 +50,10 @@ public class SchemaTwoTest {
     @Test
     public void testMarshall_ARootElementWitouthNs() throws JAXBException {
         Assert.assertEquals(
-                "<aRootElementWithNs" +
+                "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n" +
+                        "<ns2:aRootElementWithoutNs" +
                         " xmlns:ns2=\"http://omegapoint.se/packagens\"" +
-                        " xmlns=\"http://omegapoint.se/arootelementwithns\"/>",
+                        " xmlns=\"http://omegapoint.se/arootelementwithns\"/>\n",
                 jaxbHelper.marshal(new ARootElementWithoutNs(),
                         MarshallOption.Format,
                         MarshallOption.Validate).getString());
