@@ -18,21 +18,16 @@
         <tag>HEAD</tag>
     </scm>
 
-    <repositories>
-        <repository>
-            <id>omegapoint-nexus</id>
-            <name>Sonatype nexus on localhost mirror of central</name>
-            <url>http://localhost:9091/nexus/content/groups/public</url>
-        </repository>
-    </repositories>
-
-    <pluginRepositories>
-        <pluginRepository>
-            <id>omegapoint-nexus</id>
-            <name>Sonatype nexus on localhost mirror of central</name>
-            <url>http://localhost:9091/nexus/content/groups/public</url>
-        </pluginRepository>
-    </pluginRepositories>
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+                <version>4.11</version>
+                <scope>test</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
     <distributionManagement>
         <repository>
@@ -84,16 +79,25 @@
                         <!-- see http://docs.oracle.com/javase/7/docs/technotes/tools/share/xjc.html -->
                         <!-- (see http://static.highsource.org/mjiip/maven-jaxb2-plugin/generate-mojo.html#episodeFile) -->
                         <episodeFile>${project.build.directory}/generated-sources/xjc/META-INF/schema/${schema.subdir}/${schema.name}-episode.xjb</episodeFile>
-                        <schemaDirectory>${basedir}/src/main/resources/META-INF/schema/${schema.subdir}</schemaDirectory>
-                        <schemaIncludes>
-                            <schemaInclude>${schema.name}.xsd</schemaInclude>
-                        </schemaIncludes>
+                        <schemaDirectory>src/main/resources/META-INF/schema/${schema.subdir}</schemaDirectory>
                         <debug>true</debug>
-                        <catalog>${basedir}/src/main/resources/META-INF/schema/${schema.subdir}/${schema.name}.cat</catalog>
-                        <bindingDirectory>${basedir}/target/schemas/META-INF/schema</bindingDirectory>
+                        <catalog>src/main/resources/META-INF/schema/${schema.subdir}/${schema.name}.cat</catalog>
+                        <bindingDirectory>target/schemas/META-INF/schema/${schema.subdir}</bindingDirectory>
                         <bindingIncludes>
                             <bindingInclude>*/*.xjb</bindingInclude>
                         </bindingIncludes>
+
+                        <extension>true</extension>
+                        <args>
+                            <arg>-Xfluent-api</arg>
+                        </args>
+                        <plugins>
+                            <plugin>
+                                <groupId>org.jvnet.jaxb2_commons</groupId>
+                                <artifactId>jaxb2-fluent-api</artifactId>
+                                <version>3.0</version>
+                            </plugin>
+                        </plugins>
                     </configuration>
                 </plugin>
                 <plugin>
