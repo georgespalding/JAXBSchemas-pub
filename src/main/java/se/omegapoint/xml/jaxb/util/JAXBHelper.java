@@ -54,19 +54,14 @@ public class JAXBHelper<E> {
         return sf.newSchema(sources);
     }
 
+    // TODO Jdk 8 supports multiple annotations of same type...
     public static Annotation getAnnotation(AnnotatedElement ae, Class annotationClass){
         //Assert arguments
         if(!annotationClass.isAnnotation()){
             throw new IllegalArgumentException("Supplied class '"+annotationClass.getName()+"' is not an annotation!");
         }
 
-        for(Annotation annotation: ae.getAnnotations()){
-            if(annotation.annotationType() == annotationClass){
-                // TODO Jdk 8 supports multiple annotations of same type...
-                return annotation;
-            }
-        }
-        return null;
+        return ae.getAnnotation(annotationClass);
     }
 
     public static boolean hasAnnotation(AnnotatedElement ae, Class annotationClass){
@@ -74,7 +69,7 @@ public class JAXBHelper<E> {
     }
 
     public static String getNamespace(Class<?> classT){
-        Annotation ann = JAXBHelper.getAnnotation(classT, XmlType.class);
+        Annotation ann = getAnnotation(classT, XmlType.class);
         if(ann!=null){
             String ns = ((XmlType)ann).namespace();
             if(ns!=null && !ns.isEmpty()){
@@ -82,7 +77,7 @@ public class JAXBHelper<E> {
             }
         }
 
-        ann = JAXBHelper.getAnnotation(classT.getPackage(), XmlSchema.class);
+        ann = getAnnotation(classT.getPackage(), XmlSchema.class);
         if(ann!=null){
             String ns = ((XmlSchema)ann).namespace();
             if(ns!=null && !ns.isEmpty()){
