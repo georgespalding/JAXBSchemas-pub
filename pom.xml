@@ -4,7 +4,7 @@
     <parent>
         <artifactId>JAXBSchemas-common</artifactId>
         <groupId>se.omegapoint.xml.jaxb</groupId>
-        <version>1.0.4</version>
+        <version>1.0.6-SNAPSHOT</version>
         <relativePath/>
     </parent>
 
@@ -20,26 +20,10 @@
     <properties>
         <schema.name>saml-schema-protocol-2.0</schema.name>
         <schema.subdir>oasis</schema.subdir>
-        <JAXBSchemas-xmldsig.version>1.0.1</JAXBSchemas-xmldsig.version>
-        <JAXBSchemas-xenc.version>1.0.1</JAXBSchemas-xenc.version>
-        <JAXBSchemas-saml-assertion.version>1.0.1</JAXBSchemas-saml-assertion.version>
+        <JAXBSchemas-xmldsig.version>1.0.2-SNAPSHOT</JAXBSchemas-xmldsig.version>
+        <JAXBSchemas-xenc.version>1.0.2-SNAPSHOT</JAXBSchemas-xenc.version>
+        <JAXBSchemas-saml-assertion.version>1.0.2-SNAPSHOT</JAXBSchemas-saml-assertion.version>
     </properties>
-
-    <repositories>
-        <repository>
-            <id>omegapoint-nexus</id>
-            <name>Sonatype nexus on localhost mirror of central</name>
-            <url>http://localhost:9091/nexus/content/groups/public</url>
-        </repository>
-    </repositories>
-
-    <pluginRepositories>
-        <pluginRepository>
-            <id>omegapoint-nexus</id>
-            <name>Sonatype nexus on localhost mirror of central</name>
-            <url>http://localhost:9091/nexus/content/groups/public</url>
-        </pluginRepository>
-    </pluginRepositories>
 
     <dependencies>
         <dependency>
@@ -83,21 +67,21 @@
                                     <groupId>se.omegapoint.xml.jaxb</groupId>
                                     <artifactId>JAXBSchemas-xmldsig</artifactId>
                                     <version>${JAXBSchemas-xmldsig.version}</version>
-                                    <outputDirectory>src/main/resources</outputDirectory>
-                                    <includes>META-INF/schema/w3c/xmldsig-episode.xjb,META-INF/schema/w3c/xmldsig-core-schema.xsd</includes>
+                                    <outputDirectory>target/schemas</outputDirectory>
+                                    <includes>META-INF/schema/w3c/xmldsig-core-schema-episode.xjb,META-INF/schema/w3c/xmldsig-core-schema.xsd</includes>
                                 </artifactItem>
                                 <artifactItem>
                                     <groupId>se.omegapoint.xml.jaxb</groupId>
                                     <artifactId>JAXBSchemas-xenc</artifactId>
                                     <version>${JAXBSchemas-xenc.version}</version>
-                                    <outputDirectory>src/main/resources</outputDirectory>
-                                    <includes>META-INF/schema/w3c/xenc-episode.xjb,META-INF/schema/w3c/xenc-schema.xsd</includes>
+                                    <outputDirectory>target/schemas</outputDirectory>
+                                    <includes>META-INF/schema/w3c/xenc-schema-episode.xjb,META-INF/schema/w3c/xenc-schema.xsd</includes>
                                 </artifactItem>
                                 <artifactItem>
                                     <groupId>se.omegapoint.xml.jaxb</groupId>
                                     <artifactId>JAXBSchemas-saml-schema-assertion-2.0</artifactId>
                                     <version>${JAXBSchemas-saml-assertion.version}</version>
-                                    <outputDirectory>src/main/resources</outputDirectory>
+                                    <outputDirectory>target/schemas</outputDirectory>
                                     <includes>META-INF/schema/oasis/saml-schema-assertion-2.0-episode.xjb,META-INF/schema/oasis/saml-schema-assertion-2.0.xsd</includes>
                                 </artifactItem>
                             </artifactItems>
