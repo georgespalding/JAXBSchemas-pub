@@ -15,7 +15,8 @@
         <module>JAXBSchemas-saml-schema-assertion-2.0</module>
         <module>JAXBSchemas-saml-schema-protocol-2.0</module>
         <module>JAXBSchemas-XMLSchema</module>
-        <module>JAXBSchemas-sample</module>
+        <!--<module>JAXBSchemas-sample</module>-->
+        <!--<module>JAXBSchemas-cv</module>-->
         <!--
         <module>JAXBSchemas-wsdl</module>
         <module>JAXBSchemas-soap</module>
