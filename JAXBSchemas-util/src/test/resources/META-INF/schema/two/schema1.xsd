@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<xs:schema version="1.0" targetNamespace="http://omegapoint.se/arootelementwithns"
+           xmlns:ns="http://omegapoint.se/packagens"
+           xmlns:ns1="http://omegapoint.se/anelementwithns"
+           xmlns:tns="http://omegapoint.se/arootelementwithns"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+  <xs:import namespace="http://omegapoint.se/packagens" schemaLocation="schema3.xsd"/>
+
+  <xs:import namespace="http://omegapoint.se/anelementwithns" schemaLocation="schema2.xsd"/>
+
+  <xs:element name="aRootElementWithNs" type="tns:aRootElementWithNs"/>
+
+  <xs:complexType name="aRootElementWithNs">
+    <xs:sequence>
+      <xs:element name="anElementWithoutNs" type="ns:anElementWithoutNs" minOccurs="0"/>
+      <xs:element name="anElementWithNs" type="ns1:anElementWithNs" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>
+
