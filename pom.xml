@@ -8,6 +8,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <push.changes>false</push.changes>
+        <krasa-jaxb-tools.version>1.1</krasa-jaxb-tools.version>
     </properties>
 
     <scm>
@@ -26,8 +27,20 @@
                 <version>4.11</version>
                 <scope>test</scope>
             </dependency>
+            <dependency>
+                <groupId>javax.validation</groupId>
+                <artifactId>validation-api</artifactId>
+                <version>1.1.0.Final</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
+
+    <dependencies>
+        <dependency>
+            <groupId>javax.validation</groupId>
+            <artifactId>validation-api</artifactId>
+        </dependency>
+    </dependencies>
 
     <distributionManagement>
         <repository>
@@ -82,14 +95,17 @@
                         <schemaDirectory>src/main/resources/META-INF/schema/${schema.subdir}</schemaDirectory>
                         <debug>true</debug>
                         <catalog>src/main/resources/META-INF/schema/${schema.subdir}/${schema.name}.cat</catalog>
-                        <bindingDirectory>target/schemas/META-INF/schema/${schema.subdir}</bindingDirectory>
+                        <bindingDirectory>target/schemas/META-INF/schema</bindingDirectory>
                         <bindingIncludes>
-                            <bindingInclude>*/*.xjb</bindingInclude>
+                            <bindingInclude>**/*.xjb</bindingInclude>
                         </bindingIncludes>
 
                         <extension>true</extension>
                         <args>
                             <arg>-Xfluent-api</arg>
+                            <arg>-XJsr303Annotations</arg>
+                            <arg>-mark-generated</arg>
+                            <!--<arg>-XJsr303Annotations:notNullAnnotationsCustomMessages=ClassName</arg>-->
                         </args>
                         <plugins>
                             <plugin>
@@ -97,6 +113,11 @@
                                 <artifactId>jaxb2-fluent-api</artifactId>
                                 <version>3.0</version>
                             </plugin>
+                            <dependency>
+                                <groupId>com.github.krasa</groupId>
+                                <artifactId>krasa-jaxb-tools</artifactId>
+                                <version>${krasa-jaxb-tools.version}</version>
+                            </dependency>
                         </plugins>
                     </configuration>
                 </plugin>
