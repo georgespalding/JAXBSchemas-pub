@@ -1,7 +1,7 @@
-<bindings xmlns="http://java.sun.com/xml/ns/jaxb" version="2.0" 
+<bindings xmlns="http://java.sun.com/xml/ns/jaxb" version="2.0"
 	xmlns:xs="http://www.w3.org/2001/XMLSchema"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://java.sun.com/xml/ns/jaxb java.sun.com/xml/ns/jaxb/bindingschema_2_0.xsd"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/jaxb http://java.sun.com/xml/ns/jaxb/bindingschema_2_1.xsd"
 >
 	<globalBindings>
     <javaType name="java.util.Calendar" xmlType="xs:dateTime"
