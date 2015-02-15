@@ -1,0 +1,72 @@
+<?xml version="1.0"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <artifactId>JAXBSchemas-common</artifactId>
+        <groupId>se.omegapoint.xml.jaxb</groupId>
+        <version>1.0.6-SNAPSHOT</version>
+        <relativePath/>
+    </parent>
+
+    <artifactId>JAXBSchemas-xenc</artifactId>
+    <version>1.0.2-SNAPSHOT</version>
+    <packaging>jar</packaging>
+
+    <scm>
+        <developerConnection>scm:git:git@github.com:Omegapoint/${project.artifactId}.git</developerConnection>
+        <tag>HEAD</tag>
+    </scm>
+
+    <properties>
+        <schema.name>xenc-schema</schema.name>
+        <schema.subdir>w3c</schema.subdir>
+        <JAXBSchemas-xmldsig.version>1.0.2-SNAPSHOT</JAXBSchemas-xmldsig.version>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>se.omegapoint.xml.jaxb</groupId>
+            <artifactId>JAXBSchemas-util</artifactId>
+            <version>1.0.3</version>
+        </dependency>
+        <dependency>
+            <groupId>se.omegapoint.xml.jaxb</groupId>
+            <artifactId>JAXBSchemas-xmldsig</artifactId>
+            <version>${JAXBSchemas-xmldsig.version}</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <!-- Extracts the dependencies needed for this schema -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>unpack-depend-schemas</id>
+                        <phase>initialize</phase>
+                        <goals>
+                            <goal>unpack</goal>
+                        </goals>
+                        <configuration>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>se.omegapoint.xml.jaxb</groupId>
+                                    <artifactId>JAXBSchemas-xmldsig</artifactId>
+                                    <version>${JAXBSchemas-xmldsig.version}</version>
+                                    <outputDirectory>target/schemas</outputDirectory>
+                                    <includes>META-INF/schema/w3c/xmldsig-core-schema-episode.xjb,META-INF/schema/w3c/xmldsig-core-schema.xsd</includes>
+                                </artifactItem>
+                            </artifactItems>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.jvnet.jaxb2.maven2</groupId>
+                <artifactId>maven-jaxb2-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+</project>
