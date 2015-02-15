@@ -1,0 +1,5 @@
+-- TR9401 Format --
+PUBLIC "-//W3C//DTD XMLSCHEMA 200102//EN" "XMLSchema.dtd"
+PUBLIC "datatypes" "datatypes.dtd"
+PUBLIC "http://www.w3.org/XML/1998/namespace" "xml.xsd"
+SYSTEM "http://www.w3.org/2001/xml.xsd" "xml.xsd"
