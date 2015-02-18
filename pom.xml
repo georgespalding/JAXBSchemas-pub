@@ -18,24 +18,63 @@
     </scm>
 
     <modules>
-        <module>JAXBSchemas-util</module>
-        <module>JAXBSchemas-xmldsig</module>
-        <module>JAXBSchemas-xenc</module>
-        <module>JAXBSchemas-saml-schema-assertion-2.0</module>
-        <module>JAXBSchemas-saml-schema-protocol-2.0</module>
-        <module>JAXBSchemas-XMLSchema</module>
-        <!--<module>JAXBSchemas-sample</module>-->
-        <!--<module>JAXBSchemas-cv</module>-->
+        <module>util</module>
+        <module>xmldsig-core-schema</module>
+        <module>xenc-schema</module>
+        <module>saml-schema-assertion-2.0</module>
+        <module>saml-schema-protocol-2.0</module>
+        <module>XMLSchema</module>
+        <module>xhtml11</module>
+        <!--<module>sample</module>-->
+        <!--<module>cv</module>-->
         <!--
-        <module>JAXBSchemas-wsdl</module>
-        <module>JAXBSchemas-soap</module>
-        <module>JAXBSchemas-ws-policy</module>
-        <module>JAXBSchemas-wss-wssecurity-secext-1.0</module>
+        <module>wsdl</module>
+        <module>soap</module>
+        <module>ws-policy</module>
+        <module>wss-wssecurity-secext-1.0</module>
         -->
     </modules>
 
     <dependencyManagement>
         <dependencies>
+            <!-- internal -->
+            <dependency>
+                <groupId>se.omegapoint.xml.jaxb</groupId>
+                <artifactId>util</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>se.omegapoint.xml.jaxb</groupId>
+                <artifactId>XMLSchema</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>se.omegapoint.xml.jaxb</groupId>
+                <artifactId>xmldsig-core-schema</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>se.omegapoint.xml.jaxb</groupId>
+                <artifactId>xenc-schema</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>se.omegapoint.xml.jaxb</groupId>
+                <artifactId>saml-schema-assertion-2.0</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>se.omegapoint.xml.jaxb</groupId>
+                <artifactId>saml-schema-protocol-2.0</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>se.omegapoint.xml.jaxb</groupId>
+                <artifactId>xhtml11</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
             <dependency>
                 <groupId>junit</groupId>
                 <artifactId>junit</artifactId>
@@ -91,7 +130,7 @@
                 <plugin>
                     <groupId>org.jvnet.jaxb2.maven2</groupId>
                     <artifactId>maven-jaxb2-plugin</artifactId>
-                    <version>0.9.0</version>
+                    <version>0.12.3</version>
                     <executions>
                         <execution>
                             <goals>
@@ -100,6 +139,7 @@
                         </execution>
                     </executions>
                     <configuration>
+                        <strict>false</strict>
                         <verbose>true</verbose>
                         <generatePackage>${schema.package}</generatePackage>
                         <!-- The episode file can be used by webservices to instruct wsimport/xjc which pojos to bind -->
@@ -108,20 +148,31 @@
                         <!-- (see http://static.highsource.org/mjiip/maven-jaxb2-plugin/generate-mojo.html#episodeFile) -->
                         <episodeFile>${project.build.directory}/generated-sources/xjc/META-INF/schema/${schema.subdir}/${schema.name}-episode.xjb</episodeFile>
                         <schemaDirectory>src/main/resources/META-INF/schema/${schema.subdir}</schemaDirectory>
+                        <schemaIncludes>
+                            <include>${schema.name}.xsd</include>
+                        </schemaIncludes>
                         <debug>true</debug>
                         <catalog>src/main/resources/META-INF/schema/${schema.subdir}/${schema.name}.cat</catalog>
-                        <bindingDirectory>target/schemas/META-INF/schema</bindingDirectory>
-                        <bindingIncludes>
-                            <bindingInclude>**/*.xjb</bindingInclude>
-                        </bindingIncludes>
+                        <bindings>
+                            <binding>
+                                <fileset>
+                                    <directory>target/schemas/META-INF/schema</directory>
+                                </fileset>
+                            </binding>
+                            <binding>
+                                <fileset>
+                                    <directory>src/main/resources/META-INF/schema/${schema.subdir}</directory>
+                                </fileset>
+                            </binding>
+                        </bindings>
 
-                        <extension>true</extension>
-                        <args>
-                            <arg>-Xfluent-api</arg>
-                            <arg>-XJsr303Annotations</arg>
-                            <arg>-mark-generated</arg>
+                        <!--<extension>true</extension>-->
+                        <!--<args>-->
+                            <!--<arg>-Xfluent-api</arg>-->
+                            <!--<arg>-XJsr303Annotations</arg>-->
+                            <!--<arg>-mark-generated</arg>-->
                             <!--<arg>-XJsr303Annotations:notNullAnnotationsCustomMessages=ClassName</arg>-->
-                        </args>
+                        <!--</args>-->
                         <plugins>
                             <plugin>
                                 <groupId>org.jvnet.jaxb2_commons</groupId>

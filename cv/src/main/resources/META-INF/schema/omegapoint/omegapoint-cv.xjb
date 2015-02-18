@@ -1,0 +1,23 @@
+<jaxb:bindings xmlns:jaxb="http://java.sun.com/xml/ns/jaxb"
+          xmlns:xs="http://www.w3.org/2001/XMLSchema"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://java.sun.com/xml/ns/jaxb http://java.sun.com/xml/ns/jaxb/bindingschema_2_1.xsd"
+          version="2.1"
+        >
+    <jaxb:globalBindings>
+        <jaxb:javaType name="java.util.Calendar" xmlType="xs:dateTime"
+                  parseMethod="javax.xml.bind.DatatypeConverter.parseDateTime"
+                  printMethod="javax.xml.bind.DatatypeConverter.printDateTime"
+                />
+        <jaxb:javaType name="java.util.Calendar" xmlType="xs:date"
+                  parseMethod="javax.xml.bind.DatatypeConverter.parseDate"
+                  printMethod="javax.xml.bind.DatatypeConverter.printDate"
+                />
+    </jaxb:globalBindings>
+    <!-- FIXME why? -->
+    <jaxb:bindings schemaLocation="http://www.w3.org/2002/08/xhtml/xhtml1-strict.xsd"> <!-- not yahoo.xsd -->
+        <jaxb:bindings node="//xs:group[@name='i18n']/xs:complexType/xs:sequence/xs:element[@ref='Symbol']">
+            <jaxb:property name="SymbolAttribute" />
+        </jaxb:bindings>
+    </jaxb:bindings>
+</jaxb:bindings>

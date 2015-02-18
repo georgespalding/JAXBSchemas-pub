@@ -1,0 +1,74 @@
+package se.omegapoint.weld.sample;
+
+import se.omegapoint.cdi.config.Config;
+import se.omegapoint.cdi.config.ConfigContentProtocol;
+import se.omegapoint.cdi.config.ConfigContentReader;
+import se.omegapoint.cdi.config.ConfigResourceReader;
+import se.omegapoint.cdi.resource.ConfigResourceType;
+import javax.enterprise.inject.Instance;
+import javax.enterprise.inject.Produces;
+import javax.enterprise.inject.spi.InjectionPoint;
+import java.lang.annotation.Annotation;
+import java.util.List;
+
+/**
+ * Created with IntelliJ IDEA.
+ * User: geospa
+ * Date: 23/09/14
+ * Time: 00:25
+ * To change this template use File | Settings | File Templates.
+ */
+public class ConfigFactory {
+    @Produces
+    @ConfigContentReader(ConfigContentProtocol proto)
+    public ConfigResourceReader createConfigReader(Instance<ConfigContentProtocol> instance){
+        for(iterera)
+            leta upp matchande ns
+    }
+
+    @Produces
+    @ConfigSource(sources={})
+    public Config createConfig(InjectionPoint injectionPoint){
+        List<Config> configs;
+        for(Annotation qualifier:injectionPoint.getQualifiers()){
+            if(qualifier instanceof ConfigSource){
+                ConfigSource configSource = (ConfigSource) qualifier;
+                for(String source:configSource.sources()){
+                    int indexOfColon = source.indexOf(':');
+                    ConfigContentProtocol configContentProtocol;
+                    ConfigResourceType configResourceType;
+                    if(indexOfColon<0){
+                        // default to properties:
+                        configContentProtocol = ConfigContentProtocol.Properties;
+                        // assume classpath:
+                        configResourceType = ConfigResourceType.classpath;
+                    } else {
+                        String protocol=source.substring(0,indexOfColon);
+                        configContentProtocol = ConfigContentProtocol.valueOf(protocol);
+                        String resourceUrl = source.substring(indexOfColon+1);
+                        indexOfColon = source.indexOf(':');
+                        if(indexOfColon<0){
+                            // assume classpath:
+                            configResourceType = ConfigResourceType.classpath;
+                        } else {
+                            protocol=resourceUrl.substring(0,indexOfColon);
+                            if(protocol.equals("classpath")){
+                                configResourceType = ConfigResourceType.classpath;
+                            } else if(protocol.equals("classpath*")){
+                                configResourceType = ConfigResourceType.classpathall;
+                            } else {
+                                configResourceType = ConfigResourceType.url;
+                            }
+                        }
+
+
+
+                    }
+
+                    switch ()
+                    configs.add()
+                }
+            }
+        }
+    }
+}

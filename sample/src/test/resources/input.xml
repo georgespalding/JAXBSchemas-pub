@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<S:Envelope xmlns:S="http://schemas.xmlsoap.org/soap/envelope/">
+    <S:Body>
+        <ns0:findCustomerResponse xmlns:ns0="http://service.jaxws.blog/">
+            <return id="123">
+                <firstName>Jane</firstName>
+                <lastName>Doe</lastName>
+            </return>
+        </ns0:findCustomerResponse>
+    </S:Body>
+</S:Envelope>

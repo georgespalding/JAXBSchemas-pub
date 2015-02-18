@@ -1,0 +1,13 @@
+-- TR9401 Format --
+PUBLIC "http://www.w3.org/2000/09/xmldsig#" "../../../../../../target/schemas/META-INF/schema/w3c/xmldsig-core-schema.xsd"
+SYSTEM "http://www.w3.org/TR/2002/REC-xmldsig-core-20020212/xmldsig-core-schema.xsd" "../../../../../../target/schemas/META-INF/schema/w3c/xmldsig-core-schema.xsd"
+
+PUBLIC "http://www.w3.org/2001/04/xmlenc#" "../../../../../../target/schemas/META-INF/schema/w3c/xenc-schema.xsd"
+SYSTEM "http://www.w3.org/TR/2002/REC-xmlenc-core-20021210/xenc-schema.xsd" "../../../../../../target/schemas/META-INF/schema/w3c/xenc-schema.xsd"
+
+SYSTEM "http://docs.oasis-open.org/security/saml/v2.0/saml-schema-assertion-2.0.xsd" "../../../../../../target/schemas/META-INF/schema/oasis/saml-schema-assertion-2.0.xsd"
+PUBLIC "urn:oasis:names:tc:SAML:2.0:assertion" "../../../../../../target/schemas/META-INF/schema/oasis/saml-schema-assertion-2.0.xsd"
+
+SYSTEM "http://docs.oasis-open.org/security/saml/v2.0/saml-schema-protocol-2.0.xsd" "../../../../../../target/schemas/META-INF/schema/oasis/saml-schema-protocol-2.0.xsd"
+PUBLIC "urn:oasis:names:tc:SAML:2.0:protocol" "../../../../../../target/schemas/META-INF/schema/oasis/saml-schema-protocol-2.0.xsd"
+

@@ -1,0 +1,9 @@
+-- TR9401 Format --
+
+PUBLIC "http://www.w3.org/XML/1998/namespace" "xml.xsd"
+SYSTEM "http://www.w3.org/2001/xml.xsd" "xml.xsd"
+
+PUBLIC "http://www.w3.org/1999/xhtml/datatypes/" "xhtml-datatypes-1.xsd"
+
+
+-- http://blog.bdoughan.com/2011/10/jaxb-xjc-imported-schemas-and-xml.html --

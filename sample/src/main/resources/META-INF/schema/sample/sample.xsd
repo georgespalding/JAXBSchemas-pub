@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema targetNamespace="http://sample.omegapoint.se/geospa"
+            xmlns="http://sample.omegapoint.se/geospa"
+            xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol" >
+    <xsd:import namespace="urn:oasis:names:tc:SAML:2.0:protocol"/>
+    <xsd:element name="plainelem">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element ref="mydocument" />
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="mydocument" type="MyDocumentType"/>
+    <xsd:complexType name="MyDocumentType">
+        <xsd:sequence maxOccurs="unbounded">
+            <xsd:element name="stuff" type="MyElementType"/>
+            <xsd:element ref="samlp:Response"/>
+            <xsd:element ref="samlp:AuthnRequest"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="MyElementType">
+        <xsd:sequence>
+            <xsd:any namespace="##other"/>
+        </xsd:sequence>
+    </xsd:complexType>
+</xsd:schema>

@@ -1,0 +1,22 @@
+<cv:CorriculumVitae
+        xmlns:cv="http://www.omegapoint.se/2014/10/cv"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.w3.org/1999/xhtml"
+        xsi:schemaLocation="
+            http://www.w3.org/1999/xhtml http://www.w3.org/2002/08/xhtml/xhtml1-strict.xsd
+            http://www.omegapoint.se/2014/10/cv omegapoint-cv.xsd">
+    <cv:Name>Werner Herzog</cv:Name>
+    <cv:Header>
+        <cv:BriefSkills>
+            <cv:Title>Summering kompetens</cv:Title>
+            <cv:Area>Konstarter</cv:Area>
+            <cv:Skill>Keramik</cv:Skill>
+            <cv:Skill>Skulptur</cv:Skill>
+            <cv:Skill>Breakbeat</cv:Skill>
+            <cv:Area>Programmering</cv:Area>
+            <cv:Skill>Brainfuck</cv:Skill>
+            <cv:Skill>f#</cv:Skill>
+            <cv:Skill>Haskell</cv:Skill>
+        </cv:BriefSkills>
+    </cv:Header>
+</cv:CorriculumVitae>
